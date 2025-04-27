@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Survey on time spent on social media</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    #other-input, #ideal-time-input {
+      display: none;
+    }
+    #thank-you {
+      display: none;
+    }
+  </style>
+</head>
+<body class="container mt-5">
+
+  <h1 class="text-center mb-4">Hi there!!</h1>
+  <p>This survey will help us better understand the connection between social media use and mental well-being. Your responses are anonymous, and the results will be used to raise awareness and encourage healthier habits online.</p>
+
+  <div>
+    <form action="https://formspree.io/f/mgvkvdyg" method="POST" class="survey">
+      <div class="mb-3">
+        <label for="hours" class="form-label">How many hours do you spend on social media each day?</label>
+        <select name="hours" id="hours-select" class="form-select" onchange="showOtherInput()">
+          <option value="">--Please choose an option--</option>
+          <option value="4">4</option>
+          <option value="6">6</option>
+          <option value="other">More or less</option>
+        </select>
+        <div id="other-input" class="mt-2">
+          <label for="other" class="form-label">Please specify:</label>
+          <input type="text" name="other" id="other" class="form-control" />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="mood" class="form-label">How does social media affect your mood and why? (happier, more stressed...)</label>
+        <input type="text" name="mood" id="mood" class="form-control" required /> 
+      </div>
+
+      <div class="mb-3">
+        <label for="ideas" class="form-label">What do you think could help improve your mood while scrolling through social media?</label>
+        <input type="text" name="ideas" id="ideas" class="form-control" required /> 
+      </div>
+
+      <div class="mb-3">
+        <label for="time-limit" class="form-label">Would setting a time limit on your daily social media use help improve your mood?</label>
+        <select name="time-limit" id="time-limit-select" class="form-select" onchange="showTimeInput()">
+          <option value="">--Please choose an option--</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+          <option value="Maybe">Maybe</option>
+        </select>
+
+        <div id="ideal-time-input" class="mt-2">
+          <label for="ideal-time" class="form-label">Please specify how much time would be ideal:</label>
+          <input type="text" name="ideal-time" id="ideal-time" class="form-control" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <div id="thank-you" class="mt-5 p-4 border rounded shadow-sm bg-success text-white">
+    <!-- Answers will be shown here after submit -->
+  </div>
+
+  <script>
+    function showOtherInput() {
+      const select = document.getElementById('hours-select');
+      const otherInput = document.getElementById('other-input');
+      if (select.value === 'other') {
+        otherInput.style.display = 'block';
+      } else {
+        otherInput.style.display = 'none';
+      }
+    }
+
+    function showTimeInput() {
+      const select = document.getElementById('time-limit-select');
+      const idealTimeInput = document.getElementById('ideal-time-input');
+      if (select.value === 'Yes') {
+        idealTimeInput.style.display = 'block';
+      } else {
+        idealTimeInput.style.display = 'none';
+      }
+    }
+
+    const form = document.getElementById('survey-form');
+    const thankYouMessage = document.getElementById('thank-you');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // Stop the page from refreshing
+
+      // Get the form values
+      const hours = document.getElementById('hours-select').value;
+      const otherHours = document.getElementById('other').value;
+      const mood = document.getElementById('mood').value;
+      const ideas = document.getElementById('ideas').value;
+      const timeLimit = document.getElementById('time-limit-select').value;
+      const idealTime = document.getElementById('ideal-time').value;
+
+      // Hide the form
+      form.style.display = 'none';
+
+      // Show the thank you + answers
+      thankYouMessage.innerHTML = `
+        <h2 class="text-center mb-4">🎉 Thank you for completing the survey! 🎉</h2>
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Hours spent:</strong> ${hours === 'other' ? otherHours : hours} hours</li>
+          <li class="list-group-item"><strong>Mood effect:</strong> ${mood}</li>
+          <li class="list-group-item"><strong>Ideas to improve mood:</strong> ${ideas}</li>
+          <li class="list-group-item"><strong>Would a time limit help?:</strong> ${timeLimit}</li>
+          ${timeLimit === 'Yes' ? `<li class="list-group-item"><strong>Ideal time:</strong> ${idealTime}</li>` : ''}
+        </ul>
+      `;
+      thankYouMessage.style.display = 'block';
+    });
+  </script>
+
+</body>
+</html>
